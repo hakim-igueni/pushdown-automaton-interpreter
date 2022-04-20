@@ -2,6 +2,6 @@ input symbols:
 stack symbols:
 states:
 initial state: 1
-intial stack: Z
+initial stack: Z
 transitions:
 end
