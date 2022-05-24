@@ -1,0 +1,14 @@
+
+type token = 
+  | INPUTSYMBOLS
+  | STACKSYMBOLS
+  | STATES
+  | INITIALSTATE  
+  | INITIALSTACKSYMBOL
+  | TRANSITIONS
+  | SYMBOL of char
+  | COMMA
+  | SEMICOLON
+  | LPAREN
+  | RPAREN
+  | EOF
