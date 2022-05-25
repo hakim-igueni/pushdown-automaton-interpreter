@@ -16,12 +16,7 @@ type transitions = transition list;;
 
 
 (* Automaton *)
-(* type automaton = {
-  declarations: inputSymbols * stackSymbols * states * symbol * symbol;
-  transitions: transition list
-};; *)
-(* type automaton = declarations * transitions;; *)
-type automaton = (declarations * transitions);;
+type automaton = declarations * transitions;;
 
 let as_string_symbol(s : symbol): string = "" ^ make 1 s ^ "";;
 

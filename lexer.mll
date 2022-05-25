@@ -1,5 +1,4 @@
 {
-    (* open Token *)
     open Parser
     exception LexingError of string
 }

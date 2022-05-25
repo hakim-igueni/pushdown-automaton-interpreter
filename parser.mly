@@ -12,7 +12,6 @@ open Ast
 
   
 automate:
-    // d=declarations; t=transitions; EOF { { declarations = d; transitions = t } }
     d=declarations t=transitions EOF { (d,t) }
     
 declarations:
