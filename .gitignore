@@ -27,3 +27,14 @@ setup.log
 
 # Local OPAM switch
 _opam/
+
+# Menhir generated files
+parser.ml
+parser.conflicts
+parser.automaton
+
+# Binary files
+parser
+
+# VS Code cache
+.vscode
