@@ -2,7 +2,7 @@
 open Ast
 %}
 
-%token <char> SYMBOl
+%token <char> SYMBOL
 %token COMMA SEMICOLON LPAREN RPAREN EOF 
 %token INPUTSYMBOLS STACKSYMBOLS STATES INITIALSTATE INITIALSTACKSYMBOL TRANSITIONS
 
@@ -12,31 +12,32 @@ open Ast
 
   
 automate:
-    d=declarations; t=transitions; EOF { { declarations = d; transitions = t } }
-
+    // d=declarations; t=transitions; EOF { { declarations = d; transitions = t } }
+    d=declarations; t=transitions; EOF { Automaton(d,t) }
+    
 declarations:
-    s1=inputSymbols s2=stackSymbols s3=states s4=initialState s5=initialStackSymbol s6=transitions {(s1,s2,s3,s4,s5,s6)}
+    s1=inputSymbols; s2=stackSymbols; s3=states; s4=initialState; s5=initialStackSymbol; {(s1,s2,s3,s4,s5)}
 
 inputSymbols:
-    INPUTSYMBOLS s=separated_list(COMMA, SYMBOl) { s } 
+    INPUTSYMBOLS; s=separated_nonempty_list(COMMA, SYMBOL); { s } 
 
 stackSymbols:
-    STACKSYMBOLS s=separated_list(COMMA, SYMBOl) { s }
+    STACKSYMBOLS; s=separated_nonempty_list(COMMA, SYMBOL); { s }
 
 states:
-    STATES s=separated_list(COMMA, SYMBOl) { s }
+    STATES; s=separated_nonempty_list(COMMA, SYMBOL); { s }
 
 initialState:
-    INITIALSTATE s=SYMBOl { s }
+    INITIALSTATE; s=SYMBOL; { s }
 
 initialStackSymbol:
-    INITIALSTACKSYMBOL s=SYMBOl { s }
+    INITIALSTACKSYMBOL; s=SYMBOL; { s }
 
 transitions:
-    TRANSITIONS t=list(transition) { t }
+    TRANSITIONS; t=list(transition); { t }
 
 transition:
-    LPAREN s1=SYMBOl COMMA s2=option(SYMBOl) COMMA s3=SYMBOl COMMA s4=SYMBOl s5=stack RPAREN { (s1,s2,s3,s4,s5) }
+    LPAREN; s1=SYMBOL; COMMA; s2=option(SYMBOL); COMMA; s3=SYMBOL; COMMA; s4=SYMBOL; s5=stack; RPAREN; { (s1,s2,s3,s4,s5) }
 
 stack:
-    s=separated_list(SEMICOLON, SYMBOl) { s }
+    s=separated_list(SEMICOLON, SYMBOL); { s }

@@ -1,5 +1,6 @@
 {
-    open Token
+    (* open Token *)
+    open Parser
     exception LexingError of string
 }
 
@@ -18,5 +19,6 @@ rule next_token = parse
 | ';' {SEMICOLON}
 | '(' {LPAREN}
 | ')' {RPAREN}
-| space {next_token lexbuf}
+| space* {next_token lexbuf}
+| eof {EOF}
 | _ {raise (LexingError "unexpected symbol")}
