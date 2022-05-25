@@ -4,7 +4,7 @@
 }
 
 let space = [' ''\t''\n''\r']
-let symbol = ['a'-'z''A'-'Z''0'-'9'] 
+let symbol = ['a'-'z''A'-'Z''0'-'9']
 
 rule next_token = parse
 | "input symbols:"  {INPUTSYMBOLS}

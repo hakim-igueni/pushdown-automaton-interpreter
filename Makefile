@@ -6,7 +6,7 @@ SOURCES = ast.ml parser.ml lexer.ml main.ml
 
 OBJECTS = $(SOURCES:.ml=.cmo)
 
-.PHONY: clean all 
+.PHONY: clean all
 
 all: parser
 

@@ -1,9 +1,9 @@
 
-type token = 
+type token =
   | INPUTSYMBOLS
   | STACKSYMBOLS
   | STATES
-  | INITIALSTATE  
+  | INITIALSTATE
   | INITIALSTACKSYMBOL
   | TRANSITIONS
   | SYMBOL of char
