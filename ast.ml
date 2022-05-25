@@ -21,21 +21,22 @@ type transitions = transition list;;
   transitions: transition list
 };; *)
 (* type automaton = declarations * transitions;; *)
-type automaton = Automaton of (declarations * transitions);;
+type automaton = (declarations * transitions);;
 
 let as_string_symbol(s : symbol): string = "" ^ make 1 s ^ "";;
 
 let rec as_string_symbol_list(l : symbol list) = 
   match l with
   | [] -> ""
+  | [x] -> as_string_symbol x
   | (s::ls) ->  as_string_symbol(s) ^ ", " ^ as_string_symbol_list ls;;
 
 let as_string_declarations (d : declarations) : string = 
   match d with 
   | (inputSymbols, stackSymbols, states, initialState, initialstack) ->
     "inputSymbols: " ^ as_string_symbol_list inputSymbols ^ "\n" 
-    ^ "stackSymbols:" ^ as_string_symbol_list stackSymbols ^ "\n" 
-    ^ "states:" ^ as_string_symbol_list states ^ "\n" 
+    ^ "stackSymbols: " ^ as_string_symbol_list stackSymbols ^ "\n" 
+    ^ "states: " ^ as_string_symbol_list states ^ "\n" 
     ^ "initialState: " ^ as_string_symbol initialState ^ "\n" 
     ^ "initialstack: " ^ as_string_symbol initialstack;;
 
@@ -63,4 +64,4 @@ let rec as_string_transitions (ts : transitions) : string =
 
 let as_string (a : automaton) : string = 
   match a with
-  | Automaton(d, tr) -> as_string_declarations d ^ "\n" ^ as_string_transitions tr;;
+  | (d, tr) -> as_string_declarations d ^ "\n" ^ as_string_transitions tr;;
