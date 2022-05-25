@@ -3,20 +3,31 @@ open String
 type symbol = char;;
 
 (* Declarations *)
-type inputSymbols = symbol list;;
-type stackSymbols = symbol list;;
-type states = symbol list;;
-
-type declarations = inputSymbols * stackSymbols * states * symbol * symbol;;
+type declarations = {
+  inputSymbols: symbol list;
+  stackSymbols: symbol list;
+  states: symbol list;
+  initialState: symbol;
+  initialStackSymbol: symbol;
+};;
 
 (* Transitions *)
-type stack = symbol list;;
-type transition = symbol * symbol option * symbol * symbol * stack;;
+type transition = {
+  currentState: symbol;
+  inputSymbol: symbol option;
+  stackTop: symbol;
+  nextState: symbol;
+  newStackTop: symbol list;
+};;
+
 type transitions = transition list;;
 
 
 (* Automaton *)
-type automaton = declarations * transitions;;
+type automaton = {
+  declarations: declarations;
+  transitions: transitions;
+};;
 
 let as_string_symbol(s : symbol): string = "" ^ make 1 s ^ "";;
 
@@ -27,13 +38,13 @@ let rec as_string_symbol_list(l : symbol list) =
   | (s::ls) ->  as_string_symbol(s) ^ ", " ^ as_string_symbol_list ls;;
 
 let as_string_declarations (d : declarations) : string =
-  match d with
-  | (inputSymbols, stackSymbols, states, initialState, initialstack) ->
-    "\tinputSymbols: " ^ as_string_symbol_list inputSymbols ^ "\n"
-    ^ "\tstackSymbols: " ^ as_string_symbol_list stackSymbols ^ "\n"
-    ^ "\tstates: " ^ as_string_symbol_list states ^ "\n"
-    ^ "\tinitialState: " ^ as_string_symbol initialState ^ "\n"
-    ^ "\tinitialstack: " ^ as_string_symbol initialstack;;
+  (* match d with
+  | (inputSymbols, stackSymbols, states, initialState, initialstack) -> *)
+    "\tinputSymbols: " ^ as_string_symbol_list d.inputSymbols ^ "\n"
+    ^ "\tstackSymbols: " ^ as_string_symbol_list d.stackSymbols ^ "\n"
+    ^ "\tstates: " ^ as_string_symbol_list d.states ^ "\n"
+    ^ "\tinitialState: " ^ as_string_symbol d.initialState ^ "\n"
+    ^ "\tinitialStackSymbol: " ^ as_string_symbol d.initialStackSymbol;;
 
 let rec as_string_stack_list(s : symbol list) =
   match s with
@@ -41,15 +52,15 @@ let rec as_string_stack_list(s : symbol list) =
   | (s::ls) ->  as_string_symbol(s) ^ ";" ^ as_string_symbol_list ls;;
 
 let as_string_transition (t : transition) : string =
-  match t with
-  | (state, Some(inputSymbol), stackSymbol, nextState, nextStack) ->
-    "\t(" ^ as_string_symbol state ^ "," ^ as_string_symbol inputSymbol ^ ","
-    ^ as_string_symbol stackSymbol ^ "," ^ as_string_symbol nextState
-    ^ "," ^ as_string_stack_list nextStack ^ ")"
-  | (state, None, stackSymbol, nextState, nextStack) ->
-    "\t(" ^ as_string_symbol state ^ "," ^ "" ^ ","
-    ^ as_string_symbol stackSymbol ^ "," ^ as_string_symbol nextState
-    ^ "," ^ as_string_stack_list nextStack ^ ")";;
+  match t.inputSymbol with
+  | Some(inputSymbol) ->
+    "\t(" ^ as_string_symbol t.currentState ^ "," ^ as_string_symbol inputSymbol ^ ","
+    ^ as_string_symbol t.stackTop ^ "," ^ as_string_symbol t.nextState
+    ^ "," ^ as_string_stack_list t.newStackTop ^ ")"
+  | None ->
+    "\t(" ^ as_string_symbol t.currentState ^ ","
+    ^ as_string_symbol t.stackTop ^ "," ^ as_string_symbol t.nextState
+    ^ "," ^ as_string_stack_list t.newStackTop ^ ")";;
 
 let rec as_string_transitions (ts : transitions) : string =
   match ts with
@@ -58,4 +69,4 @@ let rec as_string_transitions (ts : transitions) : string =
 
 
 let as_string_automaton (a : automaton) : string =
-  match a with (d, tr) -> "\nDeclarations:\n" ^ as_string_declarations d ^ "\n\nTransitions:\n" ^ as_string_transitions tr;;
+  "\nDeclarations:\n" ^ as_string_declarations a.declarations ^ "\n\nTransitions:\n" ^ as_string_transitions a.transitions;;
