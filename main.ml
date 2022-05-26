@@ -1,7 +1,12 @@
-let channel = open_in (Sys.argv.(1))
+let channel = open_in (Sys.argv.(1));;
+let lexbuf = Lexing.from_channel channel;;
+let aut = Parser.automate Lexer.next_token lexbuf;;
 
-let lexbuf = Lexing.from_channel channel
+Printf.printf "Parse result:\n\n%s\n" (Printer.as_string_automaton aut);;
 
-let ast = Parser.automate Lexer.next_token lexbuf
+print_string "Entrez un mot: ";;
+let word = read_line ();;
 
-let _ = Printf.printf "Parse:\n\n%s\n" (Ast.as_string_automaton ast)
+print_newline ();
+
+Interpreter.execute_automaton aut word;;

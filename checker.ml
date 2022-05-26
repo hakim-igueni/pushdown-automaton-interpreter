@@ -1,7 +1,8 @@
 open Ast
 open List
-open String
 open Printf
+open Printer
+
 let check_automaton (a : automaton) : bool =
   if not(mem a.declarations.initialState a.declarations.states) then
     (printf "initialState"; false)
@@ -68,6 +69,3 @@ let rec check_automaton_determinist (transitions : transitions) : bool =
 (* if check_automaton ast then printf "OK\n" else printf "\nFAIL\n";;
 
 if check_automaton_determinist ast.transitions then printf "OK\n" else printf "\nFAIL\n";; *)
-
-
-

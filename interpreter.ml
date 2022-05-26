@@ -90,3 +90,5 @@ let execute_automaton (a : automaton) (w : string) : unit =
           print_endline "Symbole en entrée: EPSILON";
           print_endline ("Etat prochain: " ^ as_string_symbol t.nextState);
           print_stack (); *)
+
+(*TODO: gestion erreurs (check enonce) *)
