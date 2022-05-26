@@ -1,6 +1,6 @@
 {
     open Parser
-    exception LexingError of string
+    exception LexingError of char
 }
 
 let space = [' ''\t''\n''\r']
@@ -20,4 +20,4 @@ rule next_token = parse
 | symbol as c {SYMBOL(c)}
 | space {next_token lexbuf}
 | eof {EOF}
-| _ {raise (LexingError "unexpected symbol")}
+| _ as c {raise (LexingError c)}

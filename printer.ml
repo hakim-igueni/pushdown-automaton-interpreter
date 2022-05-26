@@ -37,4 +37,4 @@ let rec as_string_transitions (ts : transitions) : string =
   | (t::ts) -> as_string_transition t ^ "\n\t" ^ as_string_transitions ts;;
 
 let as_string_automaton (a : automaton) : string =
-  "Declarations:\n" ^ as_string_declarations a.declarations ^ "\n\nTransitions:\n" ^ as_string_transitions a.transitions;;
+  "Declarations:\n" ^ as_string_declarations a.declarations ^ "\n\nTransitions:\n\t" ^ as_string_transitions a.transitions;;
