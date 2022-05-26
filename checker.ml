@@ -46,17 +46,18 @@ let rec is_deterministic_automaton (transitions : transitions) : bool =
     match is1, is2 with
     | Some s1, Some s2 -> s1 = s2
     | _, _ -> true
-  in let check_two_transitions (t1 : transition) (t2 : transition) =
-    if (t1.currentState = t2.currentState && t1.stackTop = t2.stackTop
-        && check_input_symbols t1.inputSymbol t2.inputSymbol && t1.nextState != t2.nextState) then
-      (printf "Non déterministe à cause de : %s %s\n" (as_string_transition t1) (as_string_transition t2); true)
-    else false
-  in let rec loop (t1 : transition) (ts : transitions) : bool =
+  in let are_deterministic_transitions (t1 : transition) (t2 : transition) : bool =
+    if (t1.currentState = t2.currentState && t1.stackTop = t2.stackTop && check_input_symbols t1.inputSymbol t2.inputSymbol) then
+      if t1 = t2 then true
+      else
+        (printf "Automaton is non-deterministic because of these transitions : %s %s\n"
+                (as_string_transition t1) (as_string_transition t2); false)
+    else true
+  in
+  let rec check (t1 : transition) (ts : transitions) : bool =
     match ts with
-      | [] -> false
-      | t2::tss ->
-        if check_two_transitions t1 t2 then true
-        else loop t1 tss
+    | [] -> true
+    | t2::tss -> if are_deterministic_transitions t1 t2 then check t1 tss else false
   in match transitions with
-    | [] -> true (* if the automaton has no transitions then it's deterministic *)
-    | t::ts -> if loop t ts then false else is_deterministic_automaton ts;;
+  | [] -> true (* if the automaton has no transitions then it's deterministic *)
+  | t::ts -> if check t ts then is_deterministic_automaton ts else false;;

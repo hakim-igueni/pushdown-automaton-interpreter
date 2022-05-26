@@ -26,7 +26,7 @@ let update_stack (_newStackTop : symbol list) (_oldStackTop : symbol) : unit =
       push_symbols_to_stack tl);;
 
 let print_stack () : unit =
-  print_endline ("pile: " ^ as_string_symbol_list (List.rev !stack));;
+  print_endline ("Stack: " ^ as_string_symbol_list (List.rev !stack));;
 
 let print_from_position (i: int) (w: string) : unit =
   let rec loop (i: int) (w: string) : unit =
@@ -35,8 +35,8 @@ let print_from_position (i: int) (w: string) : unit =
   in try loop i w with Invalid_argument e -> print_newline ();;
 
 let print_log (w: string) : unit =
-  printf "Etat courant: %c\n" !current_state;
-  print_string "Mot restant a lire: ";
+  printf "Current state: %c\n" !current_state;
+  print_string "Remainging word: ";
   print_from_position !i w;
   print_stack ();
   print_newline ();;
@@ -76,16 +76,16 @@ let execute_automaton (a : automaton) (w : string) : unit =
       while !i < len do
         loop a.transitions w
       done;
-      while !stack != [] do (* vider la pile avec des epsiolns transitions si cest possible *)
+      while !stack <> [] do (* vider la pile avec des epsiolns transitions si cest possible *)
         loop a.transitions w
       done;
       print_newline ();
-      if !stack = [] && !i + 1 = len then print_endline ">>> Mot reconnu"
-      else print_endline ">>> Mot non reconnu";
+      if !stack = [] && !i = len then print_endline ">>> Recognized word"
+      else print_endline ">>> Unrecognized word";
     with
     | Failure e ->
       printf "[InterpreterError] The stack is empty but the input isn't fully consummed\n";
-      print_endline "\n>>> Mot non reconnu"; exit 7 (* 7 for interpreter errors *)
+      print_endline "\n>>> Unrecognized word"; exit 7 (* 7 for interpreter errors *)
     | InterpreterError ->
       printf "[InterpreterError] No matching transition\n";
-      print_endline "\n>>> Mot non reconnu"; exit 7 (* 7 for interpreter errors *)
+      print_endline "\n>>> Unrecognized word"; exit 7 (* 7 for interpreter errors *)
