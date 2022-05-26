@@ -2,15 +2,15 @@ MENHIR=menhir
 OCAMLC=ocamlc
 OCAMLLEX=ocamllex
 
-SOURCES = ast.ml parser.ml lexer.ml main.ml
+SOURCES = ast.ml parser.ml lexer.ml printer.ml interpreter.ml checker.ml main.ml
 
 OBJECTS = $(SOURCES:.ml=.cmo)
 
 .PHONY: clean all
 
-all: parser
+all: main
 
-parser: ast.cmo parser.cmi parser.cmo lexer.cmo main.cmo
+main: ast.cmo parser.cmi parser.cmo lexer.cmo printer.cmo interpreter.cmo checker.cmo main.cmo
 	$(OCAMLC) -o $@ $(OBJECTS)
 
 %.cmo: %.ml
@@ -31,8 +31,10 @@ parser.mly: ast.ml
 lexer.mll: parser.ml
 
 clean:
-	rm -fr parser.mli parser.ml lexer.ml *.cmo parser *.cmi *~ *.automaton *.conflicts
+	rm -fr parser.mli parser.ml lexer.ml *.cmo *.cmi *~ *.automaton *.conflicts main
 
 parser.cmo: ast.cmo parser.cmi
 lexer.cmo: parser.cmo
-main.cmo: parser.cmo lexer.cmo
+interpreter.cmo: ast.cmo printer.cmo
+checker.cmo: ast.cmo printer.cmo
+main.cmo: parser.cmo lexer.cmo printer.cmo interpreter.cmo

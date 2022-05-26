@@ -21,7 +21,7 @@ parser.conflicts
 parser.automaton
 
 # Binary files
-parser
+main
 
 # VS Code cache
 .vscode
