@@ -16,6 +16,8 @@ Abdesselam BENAMEUR:
 - Le Makefile `Makefile`
 - L'interpréteur `interpreter.ml`
 - Le rapport du projet `README.md`
+- Le parseur de la partie 3 `parser3.mly`
+- La définition de l'arbre de syntaxe abstraite de la partie 3 `ast3.ml`
 
 Hakim IGUENI:
 
