@@ -19,6 +19,10 @@ _build/
 parser.ml
 parser.conflicts
 parser.automaton
+parser3.ml
+parser3.conflicts
+parser3.automaton
+parser3.mli
 
 # Binary files
 main
