@@ -1,4 +1,4 @@
-(* Abstract Syntax Tree (AST) *)
+(* Abstract Syntax Tree (AST) of the first part *)
 type symbol = char;;
 
 (* Declarations *)
@@ -26,4 +26,35 @@ type transitions = transition list;;
 type automaton = {
   declarations: declarations;
   transitions: transitions;
+};;
+
+
+(* Abstract Syntax Tree (AST) of the third part *)
+
+type caseType = Top | Next | State;;
+
+type case = {
+  caseType: caseType;
+  caseBody: symbolInstruction list;
+}
+
+and symbolInstruction = (symbol * instruction)
+
+and instruction =
+| Push of symbol
+| Pop
+| Change of symbol
+| Reject
+| Case of case;;
+
+type program = case;;
+
+(* Automaton *)
+type automaton3 = {
+  inputSymbols: symbol list;
+  stackSymbols: symbol list;
+  states: symbol list;
+  initialState: symbol;
+  initialStackSymbol: symbol;
+  program: program;
 };;

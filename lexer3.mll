@@ -6,7 +6,7 @@
 let space = [' ''\t''\n''\r']
 let symbol = ['a'-'z''A'-'Z''0'-'9']
 
-rule next_token = parse
+rule next_token3 = parse
 | "input symbols:"  {INPUTSYMBOLS}
 | "stack symbols:" {STACKSYMBOLS}
 | "states:"  {STATES}
@@ -27,6 +27,6 @@ rule next_token = parse
 | ":"  {COLON}
 | ',' {COMMA}
 | symbol as c {SYMBOL(c)}
-| space {next_token lexbuf}
+| space {next_token3 lexbuf}
 | eof {EOF}
 | _ as c {raise (LexingError c)}

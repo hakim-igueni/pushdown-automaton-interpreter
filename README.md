@@ -12,12 +12,12 @@ Abdesselam BENAMEUR:
 
 - Le lexeur de la partie 1 `lexer.mll`
 - Le parseur `parser.mly`
-- La définition de l'arbre de syntaxe abstraite `ast.ml`
 - Le Makefile `Makefile`
 - L'interpréteur `interpreter.ml`
 - Le rapport du projet `README.md`
 - Le parseur de la partie 3 `parser3.mly`
-- La définition de l'arbre de syntaxe abstraite de la partie 3 `ast3.ml`
+- La définition de l'arbre de syntaxe abstraite de la partie 1 et 3 `ast.ml`
+- L'interpréteur de la partie 3 `interpreter3.ml`
 
 Hakim IGUENI:
 
@@ -25,3 +25,4 @@ Hakim IGUENI:
 - Les fonctions d'affichage `printer.ml`
 - La vérification de la correction et du déterminisme de l'automate `checker.ml`
 - Le lexeur de la partie 3 `lexer3.mll`
+- L'interpréteur de la partie 3 `interpreter3.ml`
