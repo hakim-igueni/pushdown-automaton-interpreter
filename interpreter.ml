@@ -61,31 +61,35 @@ let execute_automaton (a : automaton) (w : string) : unit =
             printf "Transition: %s\n\n" (as_string_transition t);
             print_log w)
           | Some l ->
-            (if l = w.[!i] then
+            (if !i < len && l = w.[!i] then
               (current_state := t.nextState;
               update_stack t.newStackTop (List.hd !stack);
               i := !i + 1;
               printf "Transition: %s\n\n" (as_string_transition t);
               print_log w)
             else
-              loop ts w))
+              loop ts w)) (* move to the next transition *)
         else
-          loop ts w)
+          loop ts w) (* move to the next transition *)
     in
     try
-      while !i < len do
+      while !i < len do (* loop over the input string *)
         loop a.transitions w
       done;
-      while !stack <> [] do (* vider la pile avec des epsiolns transitions si cest possible *)
+      while !stack <> [] do (* empty the stack using epsioln transitions if possible *)
         loop a.transitions w
       done;
       print_newline ();
-      if !stack = [] && !i = len then print_endline ">>> Recognized word"
-      else print_endline ">>> Unrecognized word";
+      if !i = len && !stack = [] then print_endline ">>> Recognized word"
+      else raise InterpreterError
     with
-    | Failure e ->
-      printf "[InterpreterError] The stack is empty but the input isn't fully consummed\n";
+    | Failure e -> (* error raised by List.hd *)
+      printf "[InterpreterError] The stack is empty but the input isn't fully consumed\n";
       print_endline "\n>>> Unrecognized word"; exit 7 (* 7 for interpreter errors *)
     | InterpreterError ->
-      printf "[InterpreterError] No matching transition\n";
-      print_endline "\n>>> Unrecognized word"; exit 7 (* 7 for interpreter errors *)
+      if !i = len && !stack <> [] then
+        (printf "[InterpreterError] The input is fully consumed but the stack is not empty\n";
+        print_endline "\n>>> Unrecognized word"; exit 7) (* 7 for interpreter errors *)
+      else
+        printf "[InterpreterError] No matching transition\n";
+        print_endline "\n>>> Unrecognized word"; exit 7;; (* 7 for interpreter errors *)
