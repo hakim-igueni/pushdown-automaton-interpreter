@@ -10,8 +10,9 @@ OBJECTS = $(SOURCES:.ml=.cmo)
 
 all: main
 
-main: ast.cmo parser.cmi parser.cmo lexer.cmo parser3.cmo lexer3.cmo printer.cmo interpreter.cmo checker.cmo main.cmo
-	$(OCAMLC) -o $@ $(OBJECTS)
+main: ast.cmo parser.cmi parser.cmo lexer.cmo parser3.cmo parser3.cmi lexer3.cmo printer.cmo interpreter.cmo checker.cmo main.cmo main3.cmo
+	$(OCAMLC) -o main ast.cmo parser.cmo lexer.cmo printer.cmo interpreter.cmo checker.cmo main.cmo
+	$(OCAMLC) -o main3 ast.cmo parser3.cmo lexer3.cmo printer.cmo interpreter.cmo main3.cmo
 
 %.cmo: %.ml
 	$(OCAMLC) -c $< -o $@
@@ -46,3 +47,4 @@ lexer3.cmo: parser3.cmo
 interpreter.cmo: ast.cmo printer.cmo
 checker.cmo: ast.cmo printer.cmo
 main.cmo: parser.cmo lexer.cmo printer.cmo interpreter.cmo
+main3.cmo: parser3.cmo lexer3.cmo printer.cmo interpreter.cmo

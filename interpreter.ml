@@ -108,49 +108,37 @@ let execute_automaton (a : automaton) (w : string) : unit =
 
 (* Part 3 interpreter *)
 
-let rec treat_instruction (i : instruction) (w : string) : unit =
-  match i with
-  | Pop -> pop ()
-  | Push s -> push s
-  | Change q -> update_current_state q
-  | Reject ->  raise InterpreterError
-  | Case c -> treat_case c w
-
-and treat_case (c : case) (w : string) =
-  match c.caseType with
-  | State -> treat_case_state c.caseBody w
-  | Next ->  treat_case_next c.caseBody w
-  | Top -> treat_case_top c.caseBody w
-
-and treat_case_state (ll : symbolInstruction list) (w : string): unit =
-  match ll with
-  | [] -> raise InterpreterError
-  | (s, i)::r ->
-    (if !current_state = s then treat_instruction i w
-    else treat_case_state r w)
-
-and treat_case_next (ll : symbolInstruction list) (w : string) : unit =
-  match ll with
-  | [] -> raise InterpreterError
-  | (s, ins)::r ->
-    (if w.[!i] = s then
-      (i := !i + 1;
-      treat_instruction ins w)
-    else treat_case_next r w)
-
-and treat_case_top (ll : symbolInstruction list) (w : string) : unit =
-  match ll with
-  | [] -> raise InterpreterError
-  | (s, ins)::r -> (if (List.hd !stack) = s then treat_instruction ins w else treat_case_top r w);;
-
 let execute_automaton3 (a : automaton3) (w : string) : unit =
   stack := [a.initialStackSymbol];
   current_state := a.initialState;
   i := 0;
-  print_log w;
   let len = String.length w
   in
-  try
+  let rec treat_instruction (i : instruction) (w : string) : unit =
+    match i with
+    | Pop -> pop ()
+    | Push s -> push s
+    | Change q -> update_current_state q
+    | Reject ->  raise InterpreterError
+    | Case c -> treat_case c w
+  and treat_case (c : case) (w : string) =
+    match c.caseType with
+    | State -> treat_case_state c.caseBody w
+    | Next ->  treat_case_next c.caseBody w
+    | Top -> treat_case_top c.caseBody w
+  and treat_case_state (ll : symbolInstruction list) (w : string): unit =
+    match ll with
+    | [] -> raise InterpreterError
+    | (s, i)::r -> (if !current_state = s then treat_instruction i w else treat_case_state r w)
+  and treat_case_next (ll : symbolInstruction list) (w : string) : unit =
+    match ll with
+    | [] -> raise InterpreterError
+    | (s, ins)::r -> (if !i < len && w.[!i] = s then (i := !i + 1; treat_instruction ins w) else treat_case_next r w)
+  and treat_case_top (ll : symbolInstruction list) (w : string) : unit =
+    match ll with
+    | [] -> raise InterpreterError
+    | (s, ins)::r -> (if (List.hd !stack) = s then treat_instruction ins w else treat_case_top r w)
+  in try
     while !i < len do (* loop over the input string *)
       treat_case a.program w
     done;

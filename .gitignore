@@ -26,6 +26,7 @@ parser3.mli
 
 # Binary files
 main
+main3
 
 # VS Code cache
 .vscode

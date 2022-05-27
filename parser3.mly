@@ -14,7 +14,6 @@ open Ast
 
 automate3:
     s1=inputSymbols s2=stackSymbols s3=states s4=initialState s5=initialStackSymbol p=program EOF {
-        print_string "Automaton3";
         {
             inputSymbols=s1;
             stackSymbols=s2;
@@ -26,42 +25,38 @@ automate3:
     }
 
 inputSymbols:
-    INPUTSYMBOLS s=separated_nonempty_list(COMMA, SYMBOL) { print_string "Automaton3";s }
+    INPUTSYMBOLS s=separated_nonempty_list(COMMA, SYMBOL) { s }
 
 stackSymbols:
-    STACKSYMBOLS s=separated_nonempty_list(COMMA, SYMBOL) { print_string "Automaton3";s }
+    STACKSYMBOLS s=separated_nonempty_list(COMMA, SYMBOL) { s }
 
 states:
-    STATES s=separated_nonempty_list(COMMA, SYMBOL) { print_string "Automaton3";s }
+    STATES s=separated_nonempty_list(COMMA, SYMBOL) { s }
 
 initialState:
-    INITIALSTATE s=SYMBOL { print_string "Automaton3";s }
+    INITIALSTATE s=SYMBOL { s }
 
 initialStackSymbol:
-    INITIALSTACKSYMBOL s=SYMBOL { print_string "Automaton3";s }
+    INITIALSTACKSYMBOL s=SYMBOL { s }
 
 program:
-    PROGRAM c=case {print_string "Program";c}
+    PROGRAM CASE t=caseType OF is=instructions { { caseType=t; caseBody=is } }
 // |                       {[]} // epsilon
-
-case:
-|   BEGIN CASE t=caseType OF is=instructions END { print_string "Case";{ caseType=t; caseBody=is } }
-|   CASE t=caseType OF is=instructions END { print_string "Case";{ caseType=t; caseBody=is } }
-
 caseType:
-|   TOP {print_string "TOP";Top}
-|   NEXT {print_string "NEXT";Next}
-|   STATE {print_string "STATE";State}
+|   TOP {Top}
+|   NEXT {Next}
+|   STATE {State}
 
 instructions:
-    l=nonempty_list(instruction) {print_string "instruction list";l}
+    l=nonempty_list(instruction) {l}
 
 instruction:
-    s=SYMBOL COLON ib=instructionBody {print_string "instructionBody";(s,ib)}
+    s=SYMBOL COLON ib=instructionBody {(s,ib)}
 
 instructionBody:
-|   PUSH s=SYMBOL {print_string "Push";Push s}
-|   POP {print_string "Pop";Pop}
-|   CHANGE s=SYMBOL {print_string "Change";Change s}
-|   REJECT {print_string "Reject";Reject}
-|   c=case {print_string "Case";Case c}
+|   PUSH s=SYMBOL {Push s}
+|   POP {Pop}
+|   CHANGE s=SYMBOL {Change s}
+|   REJECT {Reject}
+|   BEGIN CASE t=caseType OF is=instructions END { Case { caseType=t; caseBody=is } }
+|   CASE t=caseType OF is=instructions { Case { caseType=t; caseBody=is } }

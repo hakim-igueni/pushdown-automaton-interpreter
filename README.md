@@ -4,7 +4,13 @@
 
 Étant dans le dossier du projet, exécutez la commande `make` ce qui va générer l'exécutable du projet avec le nom `main`.
 
-Pour lancer le programme, exécutez la commande `./main <path>` tel que `path` correspond au chemin du fichier qui contient la définition de l'automate.
+Pour lancer le programme de la partie
+
+- 1 et 2: exécutez la commande `./main <path>`
+
+- 3: exécutez la commande `./main3 <path>`
+
+tel que `path` correspond au chemin du fichier qui contient la définition de l'automate.
 
 ## Division du travail
 
